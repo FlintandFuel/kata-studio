@@ -1,6 +1,6 @@
 ﻿/*
- * KATA STUDIO â€” Landing Page
- * â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+ * KATA STUDIO â€" Landing Page
+ * â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
  * Positioning angle:  Design philosophy first. The only Pretoria
  *   architecture website that reads like a manifesto, not a brochure.
  *   Kata (to mould or shape) as both process and cultural ethos.
@@ -9,18 +9,18 @@
  *   quality before any build begins; named design identity; material
  *   specificity in copy throughout.
  *
- * Primary CTA rationale:  "Begin a Conversation" â€” reflects the
+ * Primary CTA rationale:  "Begin a Conversation" â€" reflects the
  *   studio's philosophy that this is a creative relationship, not
  *   a transaction. No "Get a Quote" framing anywhere on the page.
  *
  * Font:  Google Sans Flex (variable font). Headings at weight 150
  *   create the same tension as the architecture: raw scale alongside
- *   fine detail. Body and UI at 500â€“600.
+ *   fine detail. Body and UI at 500â€"600.
  *
  * Accent colour #C4805A (burnt sienna / rammed earth terracotta):
  *   Applied to section labels, CTA border, quote marks, hover
  *   states, hero rule line, FAQ +/- icon. Never as large fill.
- * â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+ * â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
  */
 
 import { useState, useEffect } from 'react'
@@ -30,7 +30,7 @@ import './index.css'
 // Resolves public/images paths correctly for any Vite base URL (local or GitHub Pages sub-path)
 const img = (filename) => `${import.meta.env.BASE_URL}images/${filename}`
 
-// â”€â”€â”€ Motion presets â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€â"€ Motion presets â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
   visible: {
@@ -66,7 +66,7 @@ function FadeUp({ children, delay = 0, className = '' }) {
   )
 }
 
-// â”€â”€â”€ SVG hatched texture â€” unique id per instance â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€â"€ SVG hatched texture â€" unique id per instance â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 let _hatchId = 0
 function HatchTexture({ className = '' }) {
   const id = `hatch-${++_hatchId}`
@@ -86,7 +86,7 @@ function HatchTexture({ className = '' }) {
   )
 }
 
-// â”€â”€â”€ Section label (01, 02 â€¦) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€â"€ Section label (01, 02 â€¦) â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 function SectionLabel({ number, label }) {
   return (
     <p className="flex items-center gap-3 text-xs font-semibold tracking-[0.22em] uppercase text-[#C4805A] mb-8 select-none">
@@ -97,7 +97,7 @@ function SectionLabel({ number, label }) {
   )
 }
 
-// â”€â”€â”€ Real image wrapper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€â"€ Real image wrapper â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 function ProjectImg({ src, alt, aspect = 'aspect-[4/3]', className = '' }) {
   return (
     <div className={`relative overflow-hidden ${aspect} ${className}`}>
@@ -155,7 +155,7 @@ function Nav() {
             />
           </a>
 
-          {/* Desktop nav â€” collapses at xl (1280px) per brief spec */}
+          {/* Desktop nav â€" collapses at xl (1280px) per brief spec */}
           <div className="hidden xl:flex items-center gap-8">
             {links.map(l => (
               <a
@@ -240,22 +240,22 @@ function Nav() {
 function Hero() {
   const reduced = useReducedMotion()
   return (
-    <section id=”hero” style={{ marginTop: '120px' }}>
+    <section id="hero" style={{ marginTop: '120px' }}>
 
       {/* Zone 1 — centered editorial text on canvas */}
-      <div className=”relative bg-[#F7F5F2] overflow-hidden”>
+      <div className="relative bg-[#F7F5F2] overflow-hidden">
         <HatchTexture />
-        <div className=”relative max-w-[1180px] mx-auto px-6 md:px-10 py-20 md:py-28 text-center”>
+        <div className="relative max-w-[1180px] mx-auto px-6 md:px-10 py-20 md:py-28 text-center">
 
           {/* Etymology label */}
           <motion.p
             initial={reduced ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className=”text-[11px] font-semibold tracking-[0.22em] uppercase text-[#C4805A] mb-8”
+            className="text-[11px] font-semibold tracking-[0.22em] uppercase text-[#C4805A] mb-8"
           >
             kata&nbsp;&nbsp;/&nbsp;&nbsp;
-            <span className=”text-[#A8A29E] font-medium normal-case tracking-normal”>
+            <span className="text-[#A8A29E] font-medium normal-case tracking-normal">
               to mould or shape
             </span>
           </motion.p>
@@ -265,7 +265,7 @@ function Hero() {
             initial={reduced ? false : { opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.32, ease: [0.22, 1, 0.36, 1] }}
-            className=”text-[#3D3A36] leading-[1.0] mb-8 mx-auto”
+            className="text-[#3D3A36] leading-[1.0] mb-8 mx-auto"
             style={{ fontSize: 'clamp(2.75rem, 6vw, 6rem)', fontWeight: 150, maxWidth: '16ch' }}
           >
             Precise simplicity.{' '}
@@ -278,7 +278,7 @@ function Hero() {
             initial={reduced ? false : { scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 0.65, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className=”w-14 h-px bg-[#C4805A] mx-auto mb-8 origin-center”
+            className="w-14 h-px bg-[#C4805A] mx-auto mb-8 origin-center"
           />
 
           {/* Subheading */}
@@ -286,7 +286,7 @@ function Hero() {
             initial={reduced ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 1.0 }}
-            className=”text-[#A8A29E] font-medium leading-[1.7] mx-auto mb-12”
+            className="text-[#A8A29E] font-medium leading-[1.7] mx-auto mb-12"
             style={{ fontSize: '1.0625rem', maxWidth: '42ch' }}
           >
             Bespoke residential architecture in Pretoria, grounded in material craft and spatial intention.
@@ -297,20 +297,20 @@ function Hero() {
             initial={reduced ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 1.12 }}
-            className=”flex flex-wrap gap-5 items-center justify-center”
+            className="flex flex-wrap gap-5 items-center justify-center"
           >
             <a
-              href=”#contact”
-              className=”inline-flex items-center min-h-[44px] text-[11px] font-bold tracking-[0.2em] uppercase px-7 py-3 border border-[#C4805A] text-[#C4805A] hover:bg-[#C4805A] hover:text-[#F7F5F2] transition-all duration-200”
+              href="#contact"
+              className="inline-flex items-center min-h-[44px] text-[11px] font-bold tracking-[0.2em] uppercase px-7 py-3 border border-[#C4805A] text-[#C4805A] hover:bg-[#C4805A] hover:text-[#F7F5F2] transition-all duration-200"
             >
               Begin a Conversation
             </a>
             <a
-              href=”#work”
-              className=”inline-flex items-center gap-2.5 min-h-[44px] text-[11px] font-semibold tracking-[0.18em] uppercase text-[#A8A29E] hover:text-[#3D3A36] transition-colors duration-200”
+              href="#work"
+              className="inline-flex items-center gap-2.5 min-h-[44px] text-[11px] font-semibold tracking-[0.18em] uppercase text-[#A8A29E] hover:text-[#3D3A36] transition-colors duration-200"
             >
               View Selected Work
-              <span className=”w-5 h-px bg-current” />
+              <span className="w-5 h-px bg-current" />
             </a>
           </motion.div>
         </div>
@@ -321,17 +321,17 @@ function Hero() {
         initial={reduced ? false : { opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.0, delay: 1.3, ease: [0.22, 1, 0.36, 1] }}
-        className=”relative w-full aspect-[4/3] md:aspect-[16/7] overflow-hidden”
+        className="relative w-full aspect-[4/3] md:aspect-[16/7] overflow-hidden"
       >
         <img
-          src={img(“HH__Exterior Aerial 01.webp”)}
-          alt=”Kata Studio — HH House aerial view, contemporary farmhouse architecture, Pretoria”
-          className=”absolute inset-0 w-full h-full object-cover”
-          fetchpriority=”high”
+          src={img("HH__Exterior Aerial 01.webp")}
+          alt="Kata Studio — HH House aerial view, contemporary farmhouse architecture, Pretoria"
+          className="absolute inset-0 w-full h-full object-cover"
+          fetchpriority="high"
         />
       </motion.div>
 
-      <div className=”h-px bg-[#D4C9B8]” />
+      <div className="h-px bg-[#D4C9B8]" />
     </section>
   )
 }
@@ -407,7 +407,7 @@ const projects = [
     palette: 'Rammed earth, exposed steel, raw plaster',
     aspect: 'aspect-[16/10]',
     src: img("HH__Interior 06.webp"),
-    alt: 'Kata Studio â€” HH House interior, vaulted ceiling with rammed earth feature wall, Pretoria East',
+    alt: 'Kata Studio â€" HH House interior, vaulted ceiling with rammed earth feature wall, Pretoria East',
     offsetRight: false,
   },
   {
@@ -417,7 +417,7 @@ const projects = [
     palette: 'Cast concrete, kiaat timber, textured clay plaster',
     aspect: 'aspect-[4/3]',
     src: img("HDW__External View 4.webp"),
-    alt: 'Kata Studio â€” HDW Residence exterior, contemporary architecture, Magaliesberg Gauteng',
+    alt: 'Kata Studio â€" HDW Residence exterior, contemporary architecture, Magaliesberg Gauteng',
     offsetRight: true,
   },
   {
@@ -427,7 +427,7 @@ const projects = [
     palette: 'Green fluted masonry, wood spindles, concrete screed',
     aspect: 'aspect-[4/3]',
     src: img("HDW__Internal View 13.webp"),
-    alt: 'Kata Studio â€” HDW Residence interior spatial design, Magaliesberg Gauteng',
+    alt: 'Kata Studio â€" HDW Residence interior spatial design, Magaliesberg Gauteng',
     offsetRight: false,
   },
 ]
@@ -485,7 +485,7 @@ function About() {
     <section id="about" className="relative bg-[#F7F5F2] py-28 md:py-40">
       <div className="max-w-[1180px] mx-auto px-6 md:px-10">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">
-          {/* Founder image â€” 200px wide, pushed right to sit beside text column */}
+          {/* Founder image â€" 200px wide, pushed right to sit beside text column */}
           <FadeUp className="lg:col-span-5 flex justify-end">
             <img
               src={img("profile-pic.webp")}
@@ -958,7 +958,7 @@ function FAQ() {
                     className="text-[#C4805A] text-2xl leading-none flex-shrink-0 mt-0.5 select-none w-6 text-center"
                     aria-hidden="true"
                   >
-                    {open === i ? 'âˆ’' : '+'}
+                    {open === i ? '-' : '+'}
                   </span>
                 </button>
                 <AnimatePresence initial={false}>
