@@ -281,9 +281,9 @@ function Hero() {
           className="text-[#3D3A36] leading-[0.92] mb-10 max-w-[700px]"
           style={{ fontSize: 'clamp(3.5rem, 9vw, 8.5rem)', fontWeight: 150 }}
         >
-          Architecture<br />
-          <em style={{ fontStyle: 'italic', fontWeight: 150 }}>carefully</em><br />
-          formed.
+          Pursuing simplicity<br />
+          through <em style={{ fontStyle: 'italic', fontWeight: 150 }}>beautifully</em><br />
+          crafted details.
         </motion.h1>
 
         {/* Sienna rule */}
