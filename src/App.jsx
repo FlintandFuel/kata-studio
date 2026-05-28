@@ -363,7 +363,7 @@ function Philosophy() {
               <SectionLabel number="02" label="Philosophy" />
               <h2
                 className="text-[#3D3A36] leading-[1.08]"
-                style={{ fontSize: 'clamp(2.25rem, 5vw, 4rem)', fontWeight: 150 }}
+                style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2.5rem)', fontWeight: 150 }}
               >
                 Form follows<br />
                 <em style={{ fontStyle: 'italic', fontWeight: 150 }}>feeling.</em>
@@ -453,7 +453,7 @@ function SelectedWork() {
           <SectionLabel number="03" label="Selected Work" />
           <h2
             className="text-[#3D3A36] leading-[1.08]"
-            style={{ fontSize: 'clamp(2rem, 4.5vw, 3.75rem)', fontWeight: 150 }}
+            style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2.5rem)', fontWeight: 150 }}
           >
             Each project, given<br />room to breathe.
           </h2>
@@ -514,7 +514,7 @@ function About() {
               <SectionLabel number="04" label="About" />
               <h2
                 className="text-[#3D3A36] leading-[1.08] mb-8"
-                style={{ fontSize: 'clamp(2rem, 4vw, 3.25rem)', fontWeight: 150 }}
+                style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2.5rem)', fontWeight: 150 }}
               >
                 The practice<br />behind the work.
               </h2>
@@ -612,7 +612,7 @@ function MaterialWorld() {
           <SectionLabel number="05" label="Material World" />
           <h2
             className="text-[#3D3A36] leading-[1.08]"
-            style={{ fontSize: 'clamp(2rem, 4.5vw, 3.75rem)', fontWeight: 150 }}
+            style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2.5rem)', fontWeight: 150 }}
           >
             The materials that<br />make it real.
           </h2>
@@ -673,7 +673,7 @@ function Process() {
           <SectionLabel number="06" label="Process" />
           <h2
             className="text-[#3D3A36] leading-[1.08]"
-            style={{ fontSize: 'clamp(2rem, 4.5vw, 3.75rem)', fontWeight: 150 }}
+            style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2.5rem)', fontWeight: 150 }}
           >
             Three stages.<br />One intent.
           </h2>
@@ -731,7 +731,7 @@ function Testimonials() {
           <p className="text-[11px] font-semibold tracking-[0.22em] uppercase text-[#C4805A] mb-4">Client Voices</p>
           <h2
             className="text-[#3D3A36] leading-[1.08]"
-            style={{ fontSize: 'clamp(2rem, 4vw, 3.25rem)', fontWeight: 150 }}
+            style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2.5rem)', fontWeight: 150 }}
           >
             What it feels like<br />to be understood.
           </h2>
@@ -793,7 +793,7 @@ function Contact() {
               <SectionLabel number="07" label="Commission" />
               <h2
                 className="text-[#3D3A36] leading-[1.08] mb-8"
-                style={{ fontSize: 'clamp(2rem, 4vw, 3.25rem)', fontWeight: 150 }}
+                style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2.5rem)', fontWeight: 150 }}
               >
                 Every space begins<br />with a conversation.
               </h2>
@@ -946,7 +946,7 @@ function FAQ() {
           </p>
           <h2
             className="text-[#3D3A36] leading-[1.08]"
-            style={{ fontSize: 'clamp(2rem, 4vw, 3.25rem)', fontWeight: 150 }}
+            style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2.5rem)', fontWeight: 150 }}
           >
             What you might<br />want to know first.
           </h2>
