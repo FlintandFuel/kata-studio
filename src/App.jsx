@@ -1,6 +1,6 @@
-/*
- * KATA STUDIO — Landing Page
- * ─────────────────────────────────────────────────────────────────
+﻿/*
+ * KATA STUDIO â€” Landing Page
+ * â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
  * Positioning angle:  Design philosophy first. The only Pretoria
  *   architecture website that reads like a manifesto, not a brochure.
  *   Kata (to mould or shape) as both process and cultural ethos.
@@ -9,25 +9,28 @@
  *   quality before any build begins; named design identity; material
  *   specificity in copy throughout.
  *
- * Primary CTA rationale:  "Begin a Conversation" — reflects the
+ * Primary CTA rationale:  "Begin a Conversation" â€” reflects the
  *   studio's philosophy that this is a creative relationship, not
  *   a transaction. No "Get a Quote" framing anywhere on the page.
  *
  * Font:  Google Sans Flex (variable font). Headings at weight 150
  *   create the same tension as the architecture: raw scale alongside
- *   fine detail. Body and UI at 500–600.
+ *   fine detail. Body and UI at 500â€“600.
  *
  * Accent colour #C4805A (burnt sienna / rammed earth terracotta):
  *   Applied to section labels, CTA border, quote marks, hover
  *   states, hero rule line, FAQ +/- icon. Never as large fill.
- * ─────────────────────────────────────────────────────────────────
+ * â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
  */
 
 import { useState, useEffect } from 'react'
 import { motion, useReducedMotion, AnimatePresence } from 'framer-motion'
 import './index.css'
 
-// ─── Motion presets ───────────────────────────────────────────────
+// Resolves public/images paths correctly for any Vite base URL (local or GitHub Pages sub-path)
+const img = (filename) => `${import.meta.env.BASE_URL}images/${filename}`
+
+// â”€â”€â”€ Motion presets â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
   visible: {
@@ -63,7 +66,7 @@ function FadeUp({ children, delay = 0, className = '' }) {
   )
 }
 
-// ─── SVG hatched texture — unique id per instance ─────────────────
+// â”€â”€â”€ SVG hatched texture â€” unique id per instance â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 let _hatchId = 0
 function HatchTexture({ className = '' }) {
   const id = `hatch-${++_hatchId}`
@@ -83,7 +86,7 @@ function HatchTexture({ className = '' }) {
   )
 }
 
-// ─── Section label (01, 02 …) ─────────────────────────────────────
+// â”€â”€â”€ Section label (01, 02 â€¦) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function SectionLabel({ number, label }) {
   return (
     <p className="flex items-center gap-3 text-xs font-semibold tracking-[0.22em] uppercase text-[#C4805A] mb-8 select-none">
@@ -94,7 +97,7 @@ function SectionLabel({ number, label }) {
   )
 }
 
-// ─── Real image wrapper ───────────────────────────────────────────
+// â”€â”€â”€ Real image wrapper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function ProjectImg({ src, alt, aspect = 'aspect-[4/3]', className = '' }) {
   return (
     <div className={`relative overflow-hidden ${aspect} ${className}`}>
@@ -108,9 +111,9 @@ function ProjectImg({ src, alt, aspect = 'aspect-[4/3]', className = '' }) {
   )
 }
 
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // NAV
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -145,14 +148,14 @@ function Nav() {
           {/* Logo image */}
           <a href="#hero" aria-label="Kata Studio home" className="flex items-center">
             <img
-              src="/images/ks_logo.webp"
+              src={img("ks_logo.webp")}
               alt="Kata Studio"
               className="w-auto"
               style={{ height: '100px' }}
             />
           </a>
 
-          {/* Desktop nav — collapses at xl (1280px) per brief spec */}
+          {/* Desktop nav â€” collapses at xl (1280px) per brief spec */}
           <div className="hidden xl:flex items-center gap-8">
             {links.map(l => (
               <a
@@ -231,9 +234,9 @@ function Nav() {
   )
 }
 
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 01 HERO
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function Hero() {
   const reduced = useReducedMotion()
   return (
@@ -242,16 +245,16 @@ function Hero() {
       className="relative min-h-[calc(95vh-120px)] bg-[#F7F5F2] flex flex-col justify-end overflow-hidden"
       style={{ marginTop: '120px' }}
     >
-      {/* Hatch texture — right half background layer */}
+      {/* Hatch texture â€” right half background layer */}
       <div className="absolute top-0 right-0 w-1/2 h-full pointer-events-none overflow-hidden">
         <HatchTexture />
       </div>
 
-      {/* Floating project image — desktop, fills section from its top edge */}
+      {/* Floating project image â€” desktop, fills section from its top edge */}
       <div className="absolute top-0 right-0 w-[46%] h-full hidden lg:block">
         <img
-          src="/images/HH__Exterior Aerial 01.webp"
-          alt="Kata Studio — HH House aerial view, contemporary farmhouse architecture, Pretoria"
+          src={img("HH__Exterior Aerial 01.webp")}
+          alt="Kata Studio â€” HH House aerial view, contemporary farmhouse architecture, Pretoria"
           className="absolute inset-0 w-full h-full object-cover"
         />
       </div>
@@ -270,7 +273,7 @@ function Hero() {
           </span>
         </motion.p>
 
-        {/* Headline — weight 150 */}
+        {/* Headline â€” weight 150 */}
         <motion.h1
           initial={reduced ? false : { opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
@@ -333,8 +336,8 @@ function Hero() {
         >
           <div className="relative aspect-[4/3] overflow-hidden">
             <img
-              src="/images/HH__Exterior Aerial 01.webp"
-              alt="Kata Studio — HH House aerial view, contemporary farmhouse architecture, Pretoria"
+              src={img("HH__Exterior Aerial 01.webp")}
+              alt="Kata Studio â€” HH House aerial view, contemporary farmhouse architecture, Pretoria"
               className="absolute inset-0 w-full h-full object-cover"
             />
           </div>
@@ -346,9 +349,9 @@ function Hero() {
   )
 }
 
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 02 PHILOSOPHY
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function Philosophy() {
   return (
     <section className="relative bg-[#F7F5F2] py-28 md:py-40">
@@ -406,9 +409,9 @@ function Philosophy() {
   )
 }
 
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 03 SELECTED WORK
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const projects = [
   {
     number: '001',
@@ -417,7 +420,7 @@ const projects = [
     palette: 'Rammed earth, exposed steel, raw plaster',
     aspect: 'aspect-[16/10]',
     src: '/images/HH__Interior 06.webp',
-    alt: 'Kata Studio — HH House interior, vaulted ceiling with rammed earth feature wall, Pretoria East',
+    alt: 'Kata Studio â€” HH House interior, vaulted ceiling with rammed earth feature wall, Pretoria East',
     offsetRight: false,
   },
   {
@@ -427,7 +430,7 @@ const projects = [
     palette: 'Cast concrete, kiaat timber, textured clay plaster',
     aspect: 'aspect-[4/3]',
     src: '/images/HDW__External View 4.webp',
-    alt: 'Kata Studio — HDW Residence exterior, contemporary architecture, Magaliesberg Gauteng',
+    alt: 'Kata Studio â€” HDW Residence exterior, contemporary architecture, Magaliesberg Gauteng',
     offsetRight: true,
   },
   {
@@ -437,7 +440,7 @@ const projects = [
     palette: 'Green fluted masonry, wood spindles, concrete screed',
     aspect: 'aspect-[4/3]',
     src: '/images/HDW__Internal View 13.webp',
-    alt: 'Kata Studio — HDW Residence interior spatial design, Magaliesberg Gauteng',
+    alt: 'Kata Studio â€” HDW Residence interior spatial design, Magaliesberg Gauteng',
     offsetRight: false,
   },
 ]
@@ -487,18 +490,18 @@ function SelectedWork() {
   )
 }
 
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 04 ABOUT
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function About() {
   return (
     <section id="about" className="relative bg-[#F7F5F2] py-28 md:py-40">
       <div className="max-w-[1180px] mx-auto px-6 md:px-10">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">
-          {/* Founder image — 200px wide, pushed right to sit beside text column */}
+          {/* Founder image â€” 200px wide, pushed right to sit beside text column */}
           <FadeUp className="lg:col-span-5 flex justify-end">
             <img
-              src="/images/profile-pic.webp"
+              src={img("profile-pic.webp")}
               alt="Kata Studio founder, Pretoria"
               className="h-auto block"
               style={{ width: '200px', maxWidth: '100%' }}
@@ -559,9 +562,9 @@ function About() {
   )
 }
 
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 05 MATERIAL WORLD
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const materials = [
   {
     label: 'Rammed earth',
@@ -641,9 +644,9 @@ function MaterialWorld() {
   )
 }
 
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 06 PROCESS
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const processSteps = [
   {
     number: '01',
@@ -699,9 +702,9 @@ function Process() {
   )
 }
 
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // TESTIMONIALS
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const testimonials = [
   {
     quote: "They didn't just design a house. They listened until they understood how we actually wanted to live, and then they made that real.",
@@ -761,9 +764,9 @@ function Testimonials() {
   )
 }
 
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // 07 CONTACT / COMMISSION
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
@@ -892,9 +895,9 @@ function Contact() {
   )
 }
 
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // FAQ
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const faqs = [
   {
     q: 'What does the architectural design process look like from first conversation to final build?',
@@ -968,7 +971,7 @@ function FAQ() {
                     className="text-[#C4805A] text-2xl leading-none flex-shrink-0 mt-0.5 select-none w-6 text-center"
                     aria-hidden="true"
                   >
-                    {open === i ? '−' : '+'}
+                    {open === i ? 'âˆ’' : '+'}
                   </span>
                 </button>
                 <AnimatePresence initial={false}>
@@ -1000,9 +1003,9 @@ function FAQ() {
   )
 }
 
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // FOOTER
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function Footer() {
   return (
     <footer className="bg-[#3D3A36] text-[#F7F5F2]/75">
@@ -1011,7 +1014,7 @@ function Footer() {
           {/* Brand with icon */}
           <div className="md:col-span-5">
             <img
-              src="/images/ks-logo-wh.webp"
+              src={img("ks-logo-wh.webp")}
               alt="Kata Studio"
               className="w-auto mb-7"
               style={{ height: '100px' }}
@@ -1089,9 +1092,9 @@ function Footer() {
   )
 }
 
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // ROOT
-// ═════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 export default function App() {
   return (
     <div className="font-sans bg-[#F7F5F2] text-[#3D3A36] antialiased">
@@ -1111,3 +1114,4 @@ export default function App() {
     </div>
   )
 }
+
