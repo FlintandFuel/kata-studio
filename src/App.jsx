@@ -25,6 +25,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, useReducedMotion, AnimatePresence } from 'framer-motion'
+import SalesBar from './components/SalesBar'
 import './index.css'
 
 // Resolves public/images paths correctly for any Vite base URL (local or GitHub Pages sub-path)
@@ -1084,7 +1085,7 @@ function Footer() {
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 export default function App() {
   return (
-    <div className="font-sans bg-[#F7F5F2] text-[#3D3A36] antialiased">
+    <div className="font-sans bg-[#F7F5F2] text-[#3D3A36] antialiased pb-[72px]">
       <Nav />
       <main>
         <Hero />
@@ -1098,6 +1099,7 @@ export default function App() {
         <FAQ />
       </main>
       <Footer />
+      <SalesBar />
     </div>
   )
 }
