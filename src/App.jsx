@@ -240,111 +240,98 @@ function Nav() {
 function Hero() {
   const reduced = useReducedMotion()
   return (
-    <section
-      id="hero"
-      className="relative min-h-[calc(95vh-120px)] bg-[#F7F5F2] flex flex-col justify-end overflow-hidden"
-      style={{ marginTop: '120px' }}
-    >
-      {/* Hatch texture â€” right half background layer */}
-      <div className="absolute top-0 right-0 w-1/2 h-full pointer-events-none overflow-hidden">
+    <section id=”hero” style={{ marginTop: '120px' }}>
+
+      {/* Zone 1 — centered editorial text on canvas */}
+      <div className=”relative bg-[#F7F5F2] overflow-hidden”>
         <HatchTexture />
+        <div className=”relative max-w-[1180px] mx-auto px-6 md:px-10 py-20 md:py-28 text-center”>
+
+          {/* Etymology label */}
+          <motion.p
+            initial={reduced ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className=”text-[11px] font-semibold tracking-[0.22em] uppercase text-[#C4805A] mb-8”
+          >
+            kata&nbsp;&nbsp;/&nbsp;&nbsp;
+            <span className=”text-[#A8A29E] font-medium normal-case tracking-normal”>
+              to mould or shape
+            </span>
+          </motion.p>
+
+          {/* Headline */}
+          <motion.h1
+            initial={reduced ? false : { opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.32, ease: [0.22, 1, 0.36, 1] }}
+            className=”text-[#3D3A36] leading-[1.0] mb-8 mx-auto”
+            style={{ fontSize: 'clamp(2.75rem, 6vw, 6rem)', fontWeight: 150, maxWidth: '16ch' }}
+          >
+            Precise simplicity.{' '}
+            <em style={{ fontStyle: 'italic', fontWeight: 150 }}>Beautiful</em>{' '}
+            craftsmanship.
+          </motion.h1>
+
+          {/* Sienna rule — centred */}
+          <motion.div
+            initial={reduced ? false : { scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.65, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            className=”w-14 h-px bg-[#C4805A] mx-auto mb-8 origin-center”
+          />
+
+          {/* Subheading */}
+          <motion.p
+            initial={reduced ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.0 }}
+            className=”text-[#A8A29E] font-medium leading-[1.7] mx-auto mb-12”
+            style={{ fontSize: '1.0625rem', maxWidth: '42ch' }}
+          >
+            Bespoke residential architecture in Pretoria, grounded in material craft and spatial intention.
+          </motion.p>
+
+          {/* CTAs */}
+          <motion.div
+            initial={reduced ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.12 }}
+            className=”flex flex-wrap gap-5 items-center justify-center”
+          >
+            <a
+              href=”#contact”
+              className=”inline-flex items-center min-h-[44px] text-[11px] font-bold tracking-[0.2em] uppercase px-7 py-3 border border-[#C4805A] text-[#C4805A] hover:bg-[#C4805A] hover:text-[#F7F5F2] transition-all duration-200”
+            >
+              Begin a Conversation
+            </a>
+            <a
+              href=”#work”
+              className=”inline-flex items-center gap-2.5 min-h-[44px] text-[11px] font-semibold tracking-[0.18em] uppercase text-[#A8A29E] hover:text-[#3D3A36] transition-colors duration-200”
+            >
+              View Selected Work
+              <span className=”w-5 h-px bg-current” />
+            </a>
+          </motion.div>
+        </div>
       </div>
 
-      {/* Floating project image â€” desktop, fills section from its top edge */}
-      <div className="absolute top-0 right-0 w-[46%] h-full hidden lg:block">
+      {/* Zone 2 — full-width cinematic image */}
+      <motion.div
+        initial={reduced ? false : { opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.0, delay: 1.3, ease: [0.22, 1, 0.36, 1] }}
+        className=”relative w-full aspect-[4/3] md:aspect-[16/7] overflow-hidden”
+      >
         <img
-          src={img("HH__Exterior Aerial 01.webp")}
-          alt="Kata Studio â€” HH House aerial view, contemporary farmhouse architecture, Pretoria"
-          className="absolute inset-0 w-full h-full object-cover"
+          src={img(“HH__Exterior Aerial 01.webp”)}
+          alt=”Kata Studio — HH House aerial view, contemporary farmhouse architecture, Pretoria”
+          className=”absolute inset-0 w-full h-full object-cover”
+          fetchpriority=”high”
         />
-      </div>
+      </motion.div>
 
-      <div className="relative max-w-[1180px] mx-auto w-full px-6 md:px-10 pb-20 pt-16 lg:pt-24">
-        {/* Etymology label */}
-        <motion.p
-          initial={reduced ? false : { opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.25 }}
-          className="text-[11px] font-semibold tracking-[0.22em] uppercase text-[#C4805A] mb-8"
-        >
-          kata&nbsp;&nbsp;/&nbsp;&nbsp;
-          <span className="text-[#A8A29E] font-medium normal-case tracking-normal">
-            to mould or shape
-          </span>
-        </motion.p>
-
-        {/* Headline â€” weight 150 */}
-        <motion.h1
-          initial={reduced ? false : { opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
-          className="text-[#3D3A36] leading-[1.0] mb-10 max-w-full lg:max-w-[50%]"
-          style={{ fontSize: 'clamp(2.25rem, 4vw, 4.5rem)', fontWeight: 150 }}
-        >
-          Precise simplicity.<br />
-          <em style={{ fontStyle: 'italic', fontWeight: 150 }}>Beautiful</em>{' '}
-          craftsmanship.
-        </motion.h1>
-
-        {/* Sienna rule */}
-        <motion.div
-          initial={reduced ? false : { scaleX: 0, originX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 0.65, delay: 0.95, ease: [0.22, 1, 0.36, 1] }}
-          className="w-14 h-px bg-[#C4805A] mb-10 origin-left"
-        />
-
-        {/* Subheading */}
-        <motion.p
-          initial={reduced ? false : { opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.05 }}
-          className="text-[#A8A29E] font-medium leading-[1.7] max-w-[360px] mb-12"
-          style={{ fontSize: '1.0625rem' }}
-        >
-          Bespoke residential architecture in Pretoria, grounded in material craft and spatial intention.
-        </motion.p>
-
-        {/* CTAs */}
-        <motion.div
-          initial={reduced ? false : { opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.18 }}
-          className="flex flex-wrap gap-5 items-center"
-        >
-          <a
-            href="#contact"
-            className="inline-flex items-center min-h-[44px] text-[11px] font-bold tracking-[0.2em] uppercase px-7 py-3 border border-[#C4805A] text-[#C4805A] hover:bg-[#C4805A] hover:text-[#F7F5F2] transition-all duration-200"
-          >
-            Begin a Conversation
-          </a>
-          <a
-            href="#work"
-            className="inline-flex items-center gap-2.5 min-h-[44px] text-[11px] font-semibold tracking-[0.18em] uppercase text-[#A8A29E] hover:text-[#3D3A36] transition-colors duration-200"
-          >
-            View Selected Work
-            <span className="w-5 h-px bg-current" />
-          </a>
-        </motion.div>
-
-        {/* Mobile hero image */}
-        <motion.div
-          initial={reduced ? false : { opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 1.3 }}
-          className="mt-14 lg:hidden"
-        >
-          <div className="relative aspect-[4/3] overflow-hidden">
-            <img
-              src={img("HH__Exterior Aerial 01.webp")}
-              alt="Kata Studio â€” HH House aerial view, contemporary farmhouse architecture, Pretoria"
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          </div>
-        </motion.div>
-      </div>
-
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-[#D4C9B8]" />
+      <div className=”h-px bg-[#D4C9B8]” />
     </section>
   )
 }
