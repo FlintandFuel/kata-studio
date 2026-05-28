@@ -278,11 +278,11 @@ function Hero() {
           initial={reduced ? false : { opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
-          className="text-[#3D3A36] leading-[0.92] mb-10 max-w-[700px]"
-          style={{ fontSize: 'clamp(3.5rem, 9vw, 8.5rem)', fontWeight: 150 }}
+          className="text-[#3D3A36] leading-[1.0] mb-10 max-w-full lg:max-w-[50%]"
+          style={{ fontSize: 'clamp(2.25rem, 4vw, 4.5rem)', fontWeight: 150 }}
         >
           Precise simplicity.<br />
-          <em style={{ fontStyle: 'italic', fontWeight: 150 }}>Beautiful</em><br />
+          <em style={{ fontStyle: 'italic', fontWeight: 150 }}>Beautiful</em>{' '}
           craftsmanship.
         </motion.h1>
 
