@@ -23,9 +23,17 @@
  * â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
  */
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, useReducedMotion, AnimatePresence } from 'framer-motion'
+import * as THREE from 'three'
+import * as VantaNetModule from 'vanta/dist/vanta.net.min'
+
+// Vanta's UMD build comes through Vite's dep optimizer double-wrapped as
+// { default: { default: NET } } — unwrap to whatever layer is actually a function
+const NET = VantaNetModule?.default?.default || VantaNetModule?.default || VantaNetModule
 import SalesBar from './components/SalesBar'
+import Projects from './components/Projects'
+import CaseStudyModal from './components/CaseStudyModal'
 import './index.css'
 
 // Resolves public/images paths correctly for any Vite base URL (local or GitHub Pages sub-path)
@@ -88,11 +96,14 @@ function HatchTexture({ className = '' }) {
 }
 
 // â"€â"€â"€ Section label (01, 02 â€¦) â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
-function SectionLabel({ number, label }) {
+function SectionLabel({ number, label, dark = false }) {
+  // On the dark Commission section #C4805A dips below AA contrast on charcoal —
+  // swap to a lighter terracotta tint that holds the same warm accent family
+  const tint = dark ? 'text-[#D99B79]' : 'text-[#C4805A]'
   return (
-    <p className="flex items-center gap-3 text-xs font-semibold tracking-[0.22em] uppercase text-[#C4805A] mb-8 select-none">
+    <p className={`flex items-center gap-3 text-xs font-semibold tracking-[0.22em] uppercase ${tint} mb-8 select-none`}>
       <span>{number}</span>
-      <span className="w-6 h-px bg-[#C4805A] inline-block" />
+      <span className={`w-6 h-px inline-block ${dark ? 'bg-[#D99B79]' : 'bg-[#C4805A]'}`} />
       {label}
     </p>
   )
@@ -101,11 +112,11 @@ function SectionLabel({ number, label }) {
 // â"€â"€â"€ Real image wrapper â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 function ProjectImg({ src, alt, aspect = 'aspect-[4/3]', className = '' }) {
   return (
-    <div className={`relative overflow-hidden ${aspect} ${className}`}>
+    <div className={`group relative overflow-hidden ${aspect} ${className}`}>
       <img
         src={src}
         alt={alt}
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover transition-all duration-500 group-hover:scale-[1.03]"
         loading="lazy"
       />
     </div>
@@ -134,6 +145,7 @@ function Nav() {
   const links = [
     { label: 'Work', href: '#work' },
     { label: 'About', href: '#about' },
+    { label: 'Projects', href: '#projects' },
     { label: 'Process', href: '#process' },
     { label: 'Contact', href: '#contact' },
   ]
@@ -156,8 +168,8 @@ function Nav() {
             />
           </a>
 
-          {/* Desktop nav â€" collapses at xl (1280px) per brief spec */}
-          <div className="hidden xl:flex items-center gap-8">
+          {/* Desktop nav â€" 5 items, collapses to hamburger at 1100px per brief spec */}
+          <div className="hidden min-[1100px]:flex items-center gap-7">
             {links.map(l => (
               <a
                 key={l.label}
@@ -177,7 +189,7 @@ function Nav() {
 
           {/* Hamburger */}
           <button
-            className="xl:hidden flex flex-col gap-[5px] p-2 min-h-[44px] min-w-[44px] items-center justify-center"
+            className="min-[1100px]:hidden flex flex-col gap-[5px] p-2 min-h-[44px] min-w-[44px] items-center justify-center"
             onClick={() => setMenuOpen(v => !v)}
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
@@ -240,13 +252,37 @@ function Nav() {
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function Hero() {
   const reduced = useReducedMotion()
+  const vantaRef = useRef(null)
+  const vantaEffect = useRef(null)
+
+  useEffect(() => {
+    // Skip the WebGL animation for users who prefer reduced motion
+    if (reduced || !vantaRef.current || vantaEffect.current) return
+    vantaEffect.current = NET({
+      el: vantaRef.current,
+      THREE,
+      mouseControls: true,
+      touchControls: false,
+      gyroControls: false,
+      color: 0xd4c9b8,
+      backgroundColor: 0xf7f5f2,
+      maxDistance: 18.0,
+      spacing: 20.0,
+      points: 9,
+    })
+    return () => {
+      vantaEffect.current?.destroy()
+      vantaEffect.current = null
+    }
+  }, [reduced])
+
   return (
     <section id="hero" style={{ marginTop: '120px' }}>
 
-      {/* Zone 1 — centered editorial text on canvas */}
-      <div className="relative bg-[#F7F5F2] overflow-hidden">
+      {/* Zone 1 — centered editorial text on canvas, with a near-invisible Vanta NET grid behind it */}
+      <div ref={vantaRef} className="relative bg-[#F7F5F2] overflow-hidden">
         <HatchTexture />
-        <div className="relative max-w-[1180px] mx-auto px-6 md:px-10 py-20 md:py-28 text-center">
+        <div className="relative z-10 max-w-[1180px] mx-auto px-6 md:px-10 py-20 md:py-28 text-center">
 
           {/* Etymology label */}
           <motion.p
@@ -287,7 +323,7 @@ function Hero() {
             initial={reduced ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 1.0 }}
-            className="text-[#A8A29E] font-medium leading-[1.7] mx-auto mb-12"
+            className="text-[#57534E] font-light leading-[1.7] mx-auto mb-12"
             style={{ fontSize: '1.0625rem', maxWidth: '42ch' }}
           >
             Bespoke residential architecture in Pretoria, grounded in material craft and spatial intention.
@@ -328,7 +364,7 @@ function Hero() {
           src={img("HH__Exterior Aerial 01.webp")}
           alt="Kata Studio — HH House aerial view, contemporary farmhouse architecture, Pretoria"
           className="absolute inset-0 w-full h-full object-cover"
-          fetchpriority="high"
+          fetchPriority="high"
         />
       </motion.div>
 
@@ -376,7 +412,7 @@ function Philosophy() {
                 <motion.p
                   key={i}
                   variants={fadeUp}
-                  className="text-[#A8A29E] leading-[1.8] font-medium"
+                  className="text-[#57534E] leading-[1.8] font-light"
                   style={{ fontSize: '1.0625rem' }}
                 >
                   {para}
@@ -524,7 +560,7 @@ function About() {
                 <motion.p
                   key={i}
                   variants={fadeUp}
-                  className="text-[#A8A29E] leading-[1.8] font-medium"
+                  className="text-[#57534E] leading-[1.8] font-light"
                   style={{ fontSize: '1.0625rem' }}
                 >
                   {para}
@@ -610,17 +646,17 @@ function MaterialWorld() {
           {materials.map((m, i) => (
             <FadeUp key={m.label} delay={i * 0.07}>
               <figure>
-                <div className="relative aspect-square overflow-hidden">
+                <div className="group relative aspect-square overflow-hidden">
                   <img
                     src={m.src}
                     alt={m.alt}
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover transition-all duration-500 group-hover:scale-[1.03]"
                     loading="lazy"
                   />
                 </div>
                 <figcaption className="mt-3 space-y-1">
                   <p className="text-[11px] font-bold tracking-[0.18em] uppercase text-[#3D3A36]">{m.label}</p>
-                  <p className="text-[13px] text-[#A8A29E] leading-relaxed font-medium">{m.caption}</p>
+                  <p className="text-[13px] text-[#57534E] leading-relaxed font-light">{m.caption}</p>
                 </figcaption>
               </figure>
             </FadeUp>
@@ -674,75 +710,14 @@ function Process() {
                 <p className="text-5xl text-[#D4C9B8] mb-6 select-none leading-none" style={{ fontWeight: 150 }}>
                   {step.number}
                 </p>
-                <h3 className="text-base font-bold tracking-wider text-[#3D3A36] uppercase mb-5">
+                <h3 className="group relative inline-block text-base font-bold tracking-wider text-[#3D3A36] uppercase mb-5">
                   {step.title}
+                  <span className="pointer-events-none absolute left-0 -bottom-1 h-[2px] w-full origin-left scale-x-0 bg-[#C4805A] transition-transform duration-300 ease-out group-hover:scale-x-100" />
                 </h3>
-                <p className="text-[#A8A29E] leading-[1.8] font-medium" style={{ fontSize: '1rem' }}>
+                <p className="text-[#57534E] leading-[1.8] font-light" style={{ fontSize: '1rem' }}>
                   {step.body}
                 </p>
               </div>
-            </FadeUp>
-          ))}
-        </div>
-      </div>
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-[#D4C9B8]" />
-    </section>
-  )
-}
-
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// TESTIMONIALS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-const testimonials = [
-  {
-    quote: "They didn't just design a house. They listened until they understood how we actually wanted to live, and then they made that real.",
-    author: 'Client, Private Residence, Pretoria East',
-    note: 'Placeholder: to be replaced with a verified client quote.',
-  },
-  {
-    quote: "Every material choice was explained and intentional. The rammed earth wall wasn't decoration. It was the soul of the space.",
-    author: 'Client, Lifestyle Estate, Gauteng',
-    note: 'Placeholder: to be replaced with a verified client quote.',
-  },
-  {
-    quote: 'Other architects showed us mood boards. Kata Studio showed us why.',
-    author: 'Client, Bespoke New Build, Pretoria',
-    note: 'Placeholder: to be replaced with a verified client quote.',
-  },
-]
-
-function Testimonials() {
-  return (
-    <section className="relative bg-[#F7F5F2] py-28 md:py-40">
-      <div className="max-w-[1180px] mx-auto px-6 md:px-10">
-        <FadeUp className="mb-16">
-          <p className="text-[11px] font-semibold tracking-[0.22em] uppercase text-[#C4805A] mb-4">Client Voices</p>
-          <h2
-            className="text-[#3D3A36] leading-[1.08]"
-            style={{ fontSize: 'clamp(1.875rem, 3.5vw, 3.5rem)', fontWeight: 150 }}
-          >
-            What it feels like<br />to be understood.
-          </h2>
-        </FadeUp>
-
-        <div className="grid md:grid-cols-3 gap-8">
-          {testimonials.map((t, i) => (
-            <FadeUp key={i} delay={i * 0.1}>
-              <article className="border border-[#D4C9B8] p-8 flex flex-col gap-5 h-full">
-                <span className="text-5xl text-[#C4805A] leading-none select-none" style={{ fontWeight: 150 }} aria-hidden="true">
-                  &ldquo;
-                </span>
-                <blockquote
-                  className="text-[#3D3A36] leading-[1.75] flex-1 font-medium"
-                  style={{ fontSize: '1.0625rem' }}
-                >
-                  {t.quote}
-                </blockquote>
-                <footer>
-                  <p className="text-[12px] font-semibold text-[#A8A29E] tracking-wide">{t.author}</p>
-                  <p className="text-[11px] text-[#A8A29E]/50 mt-1">{t.note}</p>
-                </footer>
-              </article>
             </FadeUp>
           ))}
         </div>
@@ -766,43 +741,43 @@ function Contact() {
   }
 
   const inputClass =
-    'w-full bg-transparent border border-[#D4C9B8] px-4 py-3 text-[#3D3A36] text-sm placeholder:text-[#A8A29E]/60 focus:outline-none focus:border-[#C4805A] transition-colors duration-200 min-h-[44px] font-medium'
+    'w-full bg-transparent border border-[#F7F5F2]/20 px-4 py-3 text-[#F7F5F2] text-sm placeholder:text-[#F7F5F2]/35 focus:outline-none focus:border-[#C4805A] transition-colors duration-200 min-h-[44px] font-light'
 
   const labelClass =
-    'block text-[11px] font-semibold tracking-[0.2em] uppercase text-[#A8A29E] mb-2'
+    'block text-[11px] font-semibold tracking-[0.2em] uppercase text-[#F7F5F2]/50 mb-2'
 
   return (
-    <section id="contact" className="relative bg-[#F7F5F2] py-28 md:py-40">
+    <section id="contact" className="relative bg-[#3D3A36] py-28 md:py-40">
       <div className="max-w-[1180px] mx-auto px-6 md:px-10">
         <div className="grid lg:grid-cols-12 gap-16 lg:gap-24">
           {/* Left: copy */}
           <div className="lg:col-span-5">
             <FadeUp>
-              <SectionLabel number="07" label="Commission" />
+              <SectionLabel number="07" label="Commission" dark />
               <h2
-                className="text-[#3D3A36] leading-[1.08] mb-8"
+                className="text-[#F7F5F2] leading-[1.08] mb-8"
                 style={{ fontSize: 'clamp(1.875rem, 3.5vw, 3.5rem)', fontWeight: 150 }}
               >
                 Every space begins<br />with a conversation.
               </h2>
               <p
-                className="text-[#A8A29E] leading-[1.8] mb-10 font-medium"
+                className="text-[#F7F5F2]/65 leading-[1.8] mb-10 font-light"
                 style={{ fontSize: '1.0625rem' }}
               >
                 If you are thinking about a new home, a significant renovation, or a place that you want to feel genuinely yours, share a little of what you have in mind. We will take it from there.
               </p>
               <address className="not-italic space-y-4 text-sm">
                 <div>
-                  <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#3D3A36] mb-1">Location</p>
-                  <p className="text-[#A8A29E] font-medium">Pretoria (Tshwane), Gauteng, South Africa</p>
+                  <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#F7F5F2] mb-1">Location</p>
+                  <p className="text-[#F7F5F2]/65 font-light">Pretoria (Tshwane), Gauteng, South Africa</p>
                 </div>
                 <div>
-                  <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#3D3A36] mb-1">Instagram</p>
+                  <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#F7F5F2] mb-1">Instagram</p>
                   <a
                     href="https://www.instagram.com/katastudio.za/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#A8A29E] font-medium hover:text-[#C4805A] transition-colors"
+                    className="text-[#F7F5F2]/65 font-light hover:text-[#C4805A] transition-colors"
                   >
                     @katastudio.za
                   </a>
@@ -815,10 +790,10 @@ function Contact() {
           <div className="lg:col-span-7">
             <FadeUp delay={0.1}>
               {submitted ? (
-                <div className="border border-[#D4C9B8] p-12 text-center">
+                <div className="border border-[#F7F5F2]/20 p-12 text-center">
                   <div className="w-8 h-px bg-[#C4805A] mx-auto mb-6" />
-                  <p className="font-semibold text-[#3D3A36] text-lg mb-3">Thank you.</p>
-                  <p className="text-[#A8A29E] text-sm leading-relaxed max-w-xs mx-auto font-medium">
+                  <p className="font-semibold text-[#F7F5F2] text-lg mb-3">Thank you.</p>
+                  <p className="text-[#F7F5F2]/65 text-sm leading-relaxed max-w-xs mx-auto font-light">
                     Your message has been received. We will be in touch to begin the conversation.
                   </p>
                 </div>
@@ -868,7 +843,7 @@ function Contact() {
                     >
                       Begin a Conversation
                     </button>
-                    <p className="text-[11px] text-[#A8A29E]/60 leading-relaxed">
+                    <p className="text-[11px] text-[#F7F5F2]/40 leading-relaxed">
                       Your information is used only to respond to your enquiry.
                     </p>
                   </div>
@@ -878,7 +853,7 @@ function Contact() {
           </div>
         </div>
       </div>
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-[#D4C9B8]" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-[#F7F5F2]/10" />
     </section>
   )
 }
@@ -973,7 +948,7 @@ function FAQ() {
                       className="overflow-hidden"
                     >
                       <p
-                        className="pt-5 text-[#A8A29E] leading-[1.8] font-medium"
+                        className="pt-5 text-[#57534E] leading-[1.8] font-light"
                         style={{ fontSize: '1rem' }}
                       >
                         {faq.a}
@@ -997,29 +972,8 @@ function FAQ() {
 function Footer() {
   return (
     <footer className="bg-[#3D3A36] text-[#F7F5F2]/75">
-      <div className="max-w-[1180px] mx-auto px-6 md:px-10 py-20 md:py-28">
+      <div className="max-w-[1180px] mx-auto px-6 md:px-10 pt-20 md:pt-28 pb-6 md:pb-8">
         <div className="grid md:grid-cols-12 gap-12 md:gap-16">
-          {/* Brand with icon */}
-          <div className="md:col-span-5">
-            <img
-              src={img("ks-logo-wh.webp")}
-              alt="Kata Studio"
-              className="w-auto mb-7"
-              style={{ height: '100px' }}
-            />
-            <p className="text-sm text-[#F7F5F2]/55 leading-[1.75] max-w-xs mb-8 font-medium">
-              Boutique architectural practice in Pretoria. Bespoke luxury residential architecture grounded in material craft and spatial intention.
-            </p>
-            <a
-              href="https://www.instagram.com/katastudio.za/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[11px] font-semibold tracking-[0.22em] uppercase text-[#F7F5F2]/40 hover:text-[#C4805A] transition-colors"
-            >
-              Instagram: @katastudio.za
-            </a>
-          </div>
-
           {/* Address */}
           <div className="md:col-span-3">
             <p className="text-[11px] font-bold tracking-[0.22em] uppercase text-[#F7F5F2]/25 mb-5">Address</p>
@@ -1050,31 +1004,46 @@ function Footer() {
             <p className="text-[11px] font-bold tracking-[0.22em] uppercase text-[#F7F5F2]/25 mb-5">Registration</p>
             <p className="text-sm text-[#F7F5F2]/55 leading-relaxed font-medium">SACAP Registered Architects</p>
           </div>
+
+          {/* Brand mark + write-up — last column, reads as a signature block */}
+          <div className="md:col-span-5 md:flex md:flex-col md:items-end md:text-right">
+            <img
+              src={img("ks-logo-wh.webp")}
+              alt="Kata Studio"
+              className="h-10 w-auto mb-7 select-none"
+            />
+            <p className="text-sm text-[#F7F5F2]/55 leading-[1.75] max-w-xs mb-8 font-medium">
+              Boutique architectural practice in Pretoria. Bespoke luxury residential architecture grounded in material craft and spatial intention.
+            </p>
+            <a
+              href="https://www.instagram.com/katastudio.za/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[11px] font-semibold tracking-[0.22em] uppercase text-[#F7F5F2]/40 hover:text-[#C4805A] transition-colors"
+            >
+              Instagram: @katastudio.za
+            </a>
+          </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-[#F7F5F2]/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <p className="text-[11px] text-[#F7F5F2]/25">
+        {/* Consolidated credit line — sits close to the page edge, out of the way */}
+        <div className="mt-16 pt-6 border-t border-[#F7F5F2]/10">
+          <p className="text-[11px] text-[#F7F5F2]/25 leading-relaxed text-center md:text-left">
             &copy; {new Date().getFullYear()} Kata Studio. All rights reserved.
-          </p>
-          <p className="text-[11px] text-[#F7F5F2]/20">
+            <span className="mx-2 text-[#F7F5F2]/15">&middot;</span>
             Bespoke architect Pretoria&nbsp;&middot;&nbsp;Luxury residential architect Gauteng
+            <span className="mx-2 text-[#F7F5F2]/15">&middot;</span>
+            Website design by{' '}
+            <a
+              href="https://flintandfuel.co.za"
+              target="_blank"
+              rel="noopener"
+              className="underline hover:text-[#F7F5F2]/50 transition-colors"
+            >
+              Flint and Fuel Creative
+            </a>
           </p>
         </div>
-      </div>
-
-      {/* Mandatory Flint and Fuel credit */}
-      <div className="border-t border-[#F7F5F2]/10 py-4 text-center">
-        <p className="text-[11px] text-[#F7F5F2]/22">
-          Website design by{' '}
-          <a
-            href="https://flintandfuel.co.za"
-            target="_blank"
-            rel="noopener"
-            className="underline hover:text-[#F7F5F2]/50 transition-colors"
-          >
-            Flint and Fuel Creative
-          </a>
-        </p>
       </div>
     </footer>
   )
@@ -1084,6 +1053,8 @@ function Footer() {
 // ROOT
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 export default function App() {
+  const [activeProject, setActiveProject] = useState(null)
+
   return (
     <div className="font-sans bg-[#F7F5F2] text-[#3D3A36] antialiased pb-[72px]">
       <Nav />
@@ -1092,14 +1063,19 @@ export default function App() {
         <Philosophy />
         <SelectedWork />
         <About />
+        <Projects onOpen={setActiveProject} />
         <MaterialWorld />
         <Process />
-        <Testimonials />
         <Contact />
         <FAQ />
       </main>
       <Footer />
       <SalesBar />
+      <AnimatePresence>
+        {activeProject && (
+          <CaseStudyModal project={activeProject} onClose={() => setActiveProject(null)} />
+        )}
+      </AnimatePresence>
     </div>
   )
 }
