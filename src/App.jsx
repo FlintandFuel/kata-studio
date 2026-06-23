@@ -1,45 +1,15 @@
-﻿/*
- * KATA STUDIO â€" Landing Page
- * â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
- * Positioning angle:  Design philosophy first. The only Pretoria
- *   architecture website that reads like a manifesto, not a brochure.
- *   Kata (to mould or shape) as both process and cultural ethos.
- *
- * Top trust signals:  SACAP registration; photorealistic render
- *   quality before any build begins; named design identity; material
- *   specificity in copy throughout.
- *
- * Primary CTA rationale:  "Begin a Conversation" â€" reflects the
- *   studio's philosophy that this is a creative relationship, not
- *   a transaction. No "Get a Quote" framing anywhere on the page.
- *
- * Font:  Google Sans Flex (variable font). Headings at weight 150
- *   create the same tension as the architecture: raw scale alongside
- *   fine detail. Body and UI at 500â€"600.
- *
- * Accent colour #C4805A (burnt sienna / rammed earth terracotta):
- *   Applied to section labels, CTA border, quote marks, hover
- *   states, hero rule line, FAQ +/- icon. Never as large fill.
- * â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
- */
-
 import { useState, useEffect, useRef } from 'react'
 import { motion, useReducedMotion, AnimatePresence } from 'framer-motion'
 import * as THREE from 'three'
 import * as VantaNetModule from 'vanta/dist/vanta.net.min'
 
-// Vanta's UMD build comes through Vite's dep optimizer double-wrapped as
-// { default: { default: NET } } — unwrap to whatever layer is actually a function
 const NET = VantaNetModule?.default?.default || VantaNetModule?.default || VantaNetModule
-import SalesBar from './components/SalesBar'
 import Projects from './components/Projects'
 import CaseStudyModal from './components/CaseStudyModal'
 import './index.css'
 
-// Resolves public/images paths correctly for any Vite base URL (local or GitHub Pages sub-path)
 const img = (filename) => `${import.meta.env.BASE_URL}images/${filename}`
 
-// â"€â"€â"€ Motion presets â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
   visible: {
@@ -75,7 +45,6 @@ function FadeUp({ children, delay = 0, className = '' }) {
   )
 }
 
-// â"€â"€â"€ SVG hatched texture â€" unique id per instance â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 let _hatchId = 0
 function HatchTexture({ className = '' }) {
   const id = `hatch-${++_hatchId}`
@@ -95,10 +64,7 @@ function HatchTexture({ className = '' }) {
   )
 }
 
-// â"€â"€â"€ Section label (01, 02 â€¦) â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 function SectionLabel({ number, label, dark = false }) {
-  // On the dark Commission section #C4805A dips below AA contrast on charcoal —
-  // swap to a lighter terracotta tint that holds the same warm accent family
   const tint = dark ? 'text-[#D99B79]' : 'text-[#C4805A]'
   return (
     <p className={`flex items-center gap-3 text-xs font-semibold tracking-[0.22em] uppercase ${tint} mb-8 select-none`}>
@@ -109,23 +75,9 @@ function SectionLabel({ number, label, dark = false }) {
   )
 }
 
-// â"€â"€â"€ Real image wrapper â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
-function ProjectImg({ src, alt, aspect = 'aspect-[4/3]', className = '' }) {
-  return (
-    <div className={`group relative overflow-hidden ${aspect} ${className}`}>
-      <img
-        src={src}
-        alt={alt}
-        className="absolute inset-0 w-full h-full object-cover transition-all duration-500 group-hover:scale-[1.03]"
-        loading="lazy"
-      />
-    </div>
-  )
-}
-
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// =====================================================================
 // NAV
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// =====================================================================
 function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -143,9 +95,9 @@ function Nav() {
   }, [menuOpen])
 
   const links = [
-    { label: 'Work', href: '#work' },
-    { label: 'About', href: '#about' },
     { label: 'Projects', href: '#projects' },
+    { label: 'About', href: '#about' },
+    { label: 'Services', href: '#services' },
     { label: 'Process', href: '#process' },
     { label: 'Contact', href: '#contact' },
   ]
@@ -158,7 +110,6 @@ function Nav() {
         }`}
       >
         <nav className="max-w-[1180px] mx-auto px-6 md:px-10 py-[10px] flex items-center justify-between">
-          {/* Logo image */}
           <a href="#hero" aria-label="Kata Studio home" className="flex items-center">
             <img
               src={img("ks_logo.webp")}
@@ -168,7 +119,6 @@ function Nav() {
             />
           </a>
 
-          {/* Desktop nav â€" 5 items, collapses to hamburger at 1100px per brief spec */}
           <div className="hidden min-[1100px]:flex items-center gap-7">
             {links.map(l => (
               <a
@@ -187,7 +137,6 @@ function Nav() {
             </a>
           </div>
 
-          {/* Hamburger */}
           <button
             className="min-[1100px]:hidden flex flex-col gap-[5px] p-2 min-h-[44px] min-w-[44px] items-center justify-center"
             onClick={() => setMenuOpen(v => !v)}
@@ -201,7 +150,6 @@ function Nav() {
         </nav>
       </header>
 
-      {/* Mobile overlay */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -210,9 +158,21 @@ function Nav() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.2 } }}
             transition={{ duration: 0.28 }}
-            className="fixed inset-0 z-40 bg-[#3D3A36] flex flex-col px-8 pt-28 pb-12"
+            className="fixed inset-0 z-[60] bg-[#3D3A36] flex flex-col px-8 pt-10 pb-12"
           >
-            <nav className="flex flex-col gap-7">
+            {/* Close button */}
+            <div className="flex justify-end mb-12">
+              <button
+                onClick={() => setMenuOpen(false)}
+                aria-label="Close menu"
+                className="flex items-center justify-center w-11 h-11 min-h-[44px] min-w-[44px]"
+              >
+                <span className="block w-7 h-px bg-[#F7F5F2] rotate-45 absolute" />
+                <span className="block w-7 h-px bg-[#F7F5F2] -rotate-45 absolute" />
+              </button>
+            </div>
+
+            <nav className="flex flex-col gap-8">
               {links.map((l, i) => (
                 <motion.a
                   key={l.label}
@@ -221,7 +181,7 @@ function Nav() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.07, duration: 0.38 }}
                   onClick={() => setMenuOpen(false)}
-                  className="text-[2.25rem] text-[#F7F5F2]/90 hover:text-[#C4805A] transition-colors tracking-wide min-h-[44px] flex items-center"
+                  className="text-[2.5rem] text-[#F7F5F2]/90 hover:text-[#C4805A] transition-colors tracking-wide min-h-[44px] flex items-center"
                   style={{ fontWeight: 300 }}
                 >
                   {l.label}
@@ -237,7 +197,7 @@ function Nav() {
                 Begin a Conversation
               </a>
               <p className="mt-6 text-[11px] text-[#F7F5F2]/25 tracking-widest">
-                Pretoria, Gauteng, South Africa
+                Based in Pretoria, working across South Africa
               </p>
             </div>
           </motion.div>
@@ -247,16 +207,15 @@ function Nav() {
   )
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// =====================================================================
 // 01 HERO
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// =====================================================================
 function Hero() {
   const reduced = useReducedMotion()
   const vantaRef = useRef(null)
   const vantaEffect = useRef(null)
 
   useEffect(() => {
-    // Skip the WebGL animation for users who prefer reduced motion
     if (reduced || !vantaRef.current || vantaEffect.current) return
     vantaEffect.current = NET({
       el: vantaRef.current,
@@ -278,13 +237,10 @@ function Hero() {
 
   return (
     <section id="hero" style={{ marginTop: '120px' }}>
-
-      {/* Zone 1 — centered editorial text on canvas, with a near-invisible Vanta NET grid behind it */}
       <div ref={vantaRef} className="relative bg-[#F7F5F2] overflow-hidden">
         <HatchTexture />
         <div className="relative z-10 max-w-[1180px] mx-auto px-6 md:px-10 py-20 md:py-28 text-center">
 
-          {/* Etymology label */}
           <motion.p
             initial={reduced ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
@@ -297,20 +253,18 @@ function Hero() {
             </span>
           </motion.p>
 
-          {/* Headline */}
           <motion.h1
             initial={reduced ? false : { opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.32, ease: [0.22, 1, 0.36, 1] }}
             className="text-[#3D3A36] leading-[1.0] mb-8 mx-auto"
-            style={{ fontSize: 'clamp(2.75rem, 6vw, 6rem)', fontWeight: 150, maxWidth: '16ch' }}
+            style={{ fontSize: 'clamp(2.75rem, 6vw, 6rem)', fontWeight: 150, maxWidth: '20ch' }}
           >
-            Precise simplicity.{' '}
+            Pursuing simplicity.{' '}
             <em style={{ fontStyle: 'italic', fontWeight: 150 }}>Beautiful</em>{' '}
             craftsmanship.
           </motion.h1>
 
-          {/* Sienna rule — centred */}
           <motion.div
             initial={reduced ? false : { scaleX: 0 }}
             animate={{ scaleX: 1 }}
@@ -318,18 +272,16 @@ function Hero() {
             className="w-14 h-px bg-[#C4805A] mx-auto mb-8 origin-center"
           />
 
-          {/* Subheading */}
           <motion.p
             initial={reduced ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 1.0 }}
             className="text-[#57534E] font-light leading-[1.7] mx-auto mb-12"
-            style={{ fontSize: '1.0625rem', maxWidth: '42ch' }}
+            style={{ fontSize: '1.0625rem', maxWidth: '46ch' }}
           >
-            Bespoke residential architecture in Pretoria, grounded in material craft and spatial intention.
+            Architectural design rooted in material craft and spatial intention. Based in Pretoria, working across South Africa.
           </motion.p>
 
-          {/* CTAs */}
           <motion.div
             initial={reduced ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
@@ -343,17 +295,16 @@ function Hero() {
               Begin a Conversation
             </a>
             <a
-              href="#work"
+              href="#projects"
               className="inline-flex items-center gap-2.5 min-h-[44px] text-[11px] font-semibold tracking-[0.18em] uppercase text-[#A8A29E] hover:text-[#3D3A36] transition-colors duration-200"
             >
-              View Selected Work
+              View Featured Work
               <span className="w-5 h-px bg-current" />
             </a>
           </motion.div>
         </div>
       </div>
 
-      {/* Zone 2 — full-width cinematic image */}
       <motion.div
         initial={reduced ? false : { opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
@@ -362,7 +313,7 @@ function Hero() {
       >
         <img
           src={img("HH__Exterior Aerial 01.webp")}
-          alt="Kata Studio — HH House aerial view, contemporary farmhouse architecture, Pretoria"
+          alt="Kata Studio - House Harrington aerial view, contemporary coastal architecture"
           className="absolute inset-0 w-full h-full object-cover"
           fetchPriority="high"
         />
@@ -373,9 +324,9 @@ function Hero() {
   )
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// =====================================================================
 // 02 PHILOSOPHY
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// =====================================================================
 function Philosophy() {
   return (
     <section className="relative bg-[#F7F5F2] py-28 md:py-40">
@@ -404,10 +355,10 @@ function Philosophy() {
               className="space-y-7"
             >
               {[
-                'Every space we create begins not with a drawing, but with the question of what you want to feel when you walk through the door. Everything from the rafter angles to the clay on the walls is our answer.',
-                'Great architecture is not assembled from a catalogue of finishes and floor plans. It is formed, slowly and deliberately, from a deep understanding of how you want to live. That is the meaning of Kata: to mould and shape with intention.',
-                'This studio treats every project as an act of material storytelling. The rammed earth wall is not decoration. The exposed timber rafter is not aesthetic. They are the soul of the space, chosen because they carry the warmth of the person who will inhabit it.',
-                'Where others lead with credentials, we lead with conviction. The result is not a house that looks beautiful in a photograph. It is a space that feels unmistakably yours, every day you wake up inside it.',
+                'Our practice is built on the core belief that architecture is an art form with the power to mould and shape the world we inhabit. We are passionate about creating spaces that not only captivate the senses but also reflect the unique aspirations and desires of our clients.',
+                'We are committed to crafting extraordinary structures that harmonize seamlessly with their surroundings while pushing the boundaries of innovation. Every space we create reflects our unwavering commitment to the highest standards of quality and meticulous attention to detail.',
+                'We celebrate the timeless beauty and authenticity of handcrafted design, always striving to seamlessly blend traditional craftsmanship techniques with innovative design concepts. Our approach is rooted in a profound respect for the interplay between form and function.',
+                'We draw inspiration from materials, each offering a unique aesthetic language that can convey emotions, tell stories, and provoke thought. It is through this deep engagement with materials that we transform ideas into tangible creations that engage and resonate on a visceral level.',
               ].map((para, i) => (
                 <motion.p
                   key={i}
@@ -422,7 +373,7 @@ function Philosophy() {
                 variants={fadeUp}
                 className="text-[11px] font-semibold tracking-[0.22em] uppercase text-[#C4805A] pt-2"
               >
-                SACAP Registered Architects&nbsp;&nbsp;&middot;&nbsp;&nbsp;Pretoria, Gauteng
+                SACAP Registered&nbsp;&nbsp;&middot;&nbsp;&nbsp;Senior Architectural Technologist&nbsp;&nbsp;&middot;&nbsp;&nbsp;Pretoria, Gauteng
               </motion.p>
             </motion.div>
           </div>
@@ -433,109 +384,26 @@ function Philosophy() {
   )
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// 03 SELECTED WORK
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-const projects = [
-  {
-    number: '001',
-    name: 'HH House',
-    location: 'Pretoria East',
-    palette: 'Rammed earth, exposed steel, raw plaster',
-    aspect: 'aspect-[16/10]',
-    src: img("HH__Interior 06.webp"),
-    alt: 'Kata Studio â€" HH House interior, vaulted ceiling with rammed earth feature wall, Pretoria East',
-    offsetRight: false,
-  },
-  {
-    number: '002',
-    name: 'HDW Residence',
-    location: 'Magaliesberg, Gauteng',
-    palette: 'Cast concrete, kiaat timber, textured clay plaster',
-    aspect: 'aspect-[4/3]',
-    src: img("HDW__External View 4.webp"),
-    alt: 'Kata Studio â€" HDW Residence exterior, contemporary architecture, Magaliesberg Gauteng',
-    offsetRight: true,
-  },
-  {
-    number: '003',
-    name: 'HDW Interior',
-    location: 'Magaliesberg, Gauteng',
-    palette: 'Green fluted masonry, wood spindles, concrete screed',
-    aspect: 'aspect-[4/3]',
-    src: img("HDW__Internal View 13.webp"),
-    alt: 'Kata Studio â€" HDW Residence interior spatial design, Magaliesberg Gauteng',
-    offsetRight: false,
-  },
-]
-
-function SelectedWork() {
-  return (
-    <section id="work" className="relative bg-[#F7F5F2] py-28 md:py-40">
-      <div className="max-w-[1180px] mx-auto px-6 md:px-10">
-        <FadeUp className="mb-16 md:mb-24">
-          <SectionLabel number="03" label="Selected Work" />
-          <h2
-            className="text-[#3D3A36] leading-[1.08]"
-            style={{ fontSize: 'clamp(1.875rem, 3.5vw, 3.5rem)', fontWeight: 150 }}
-          >
-            Each project, given<br />room to breathe.
-          </h2>
-        </FadeUp>
-
-        <div className="space-y-28 md:space-y-40">
-          {projects.map((p, i) => (
-            <FadeUp key={p.number} delay={0.05}>
-              <article className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-                {/* Image */}
-                <div className={p.offsetRight ? 'lg:col-span-7 lg:col-start-6' : 'lg:col-span-8'}>
-                  <ProjectImg src={p.src} alt={p.alt} aspect={p.aspect} />
-                </div>
-                {/* Caption */}
-                <div className={`lg:pt-10 ${p.offsetRight ? 'lg:col-span-4 lg:col-start-1 lg:row-start-1' : 'lg:col-span-4'}`}>
-                  <p className="text-[11px] font-semibold tracking-[0.22em] text-[#C4805A] uppercase mb-4">{p.number}</p>
-                  <h3
-                    className="text-[#3D3A36] mb-2"
-                    style={{ fontSize: '1.25rem', fontWeight: 500 }}
-                  >
-                    {p.name}
-                  </h3>
-                  <p className="text-sm text-[#A8A29E] tracking-wide mb-4">{p.location}</p>
-                  <div className="w-8 h-px bg-[#D4C9B8] mb-4" />
-                  <p className="text-sm text-[#A8A29E]/80 leading-relaxed font-medium">{p.palette}</p>
-                </div>
-              </article>
-            </FadeUp>
-          ))}
-        </div>
-      </div>
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-[#D4C9B8]" />
-    </section>
-  )
-}
-
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// 04 ABOUT
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// =====================================================================
+// 03 ABOUT
+// =====================================================================
 function About() {
   return (
     <section id="about" className="relative bg-[#F7F5F2] py-28 md:py-40">
       <div className="max-w-[1180px] mx-auto px-6 md:px-10">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-20 items-start">
-          {/* Founder image â€" 200px wide, pushed right to sit beside text column */}
-          <FadeUp className="lg:col-span-5 flex justify-end">
+          <FadeUp className="lg:col-span-5 flex justify-start lg:justify-end">
             <img
               src={img("profile-pic.webp")}
-              alt="Kata Studio founder, Pretoria"
+              alt="Arne Gunter, Kata Studio founder"
               className="h-auto block"
               style={{ width: '200px', maxWidth: '100%' }}
             />
           </FadeUp>
 
-          {/* Text */}
           <div className="lg:col-span-7">
             <FadeUp>
-              <SectionLabel number="04" label="About" />
+              <SectionLabel number="03" label="About" />
               <h2
                 className="text-[#3D3A36] leading-[1.08] mb-8"
                 style={{ fontSize: 'clamp(1.875rem, 3.5vw, 3.5rem)', fontWeight: 150 }}
@@ -552,10 +420,10 @@ function About() {
               className="space-y-6"
             >
               {[
-                'Kata Studio is a boutique architectural practice based in Pretoria. The name comes from the Japanese: to mould or shape. It is not a metaphor. It describes exactly how we approach every commission.',
-                'This is not a studio that will show you three options and ask which you prefer. It is a studio that will spend real time understanding how you move through space, what you notice in a room, and what kind of quiet a building needs to hold.',
-                'The work draws on the material richness of the South African landscape: rammed earth, raw timber, cast concrete, and local stone. Not as a nostalgic gesture, but because these materials age honestly, wear beautifully, and carry a physical warmth that no imported finish can replicate.',
-                'If you are building a home that you want to mean something in thirty years, this is where that conversation starts.',
+                'Kata Studio is a boutique architectural design practice based in Pretoria, founded by Arne Gunter. The name comes from the Japanese: to mould or shape. It describes exactly how we approach every commission.',
+                'Originally from Richards Bay and a Tshwane University of Technology graduate, Arne has built up an impressive portfolio spanning over a decade at Earthworld Architects (2012 to 2023), working across institutional, commercial, recreational, industrial, and residential projects both locally and internationally.',
+                'He has a deep appreciation for detail and craftsmanship, visible in his knowledge and use of materiality across every project. His passion for timber construction has led to the development of various timber building systems that incorporate a unique approach to modular and systemic thinking, positioning him at the forefront of the craft.',
+                'While based in Pretoria, the practice works across Gauteng and takes on select projects throughout South Africa. Whether a private residence, a rural farmstead, a commercial facility, or a specialized timber structure, the same design philosophy applies: precision, craft, and intention.',
               ].map((para, i) => (
                 <motion.p
                   key={i}
@@ -566,6 +434,19 @@ function About() {
                   {para}
                 </motion.p>
               ))}
+
+              <motion.blockquote
+                variants={fadeUp}
+                className="border-l-2 border-[#C4805A] pl-6 py-2 mt-4"
+              >
+                <p className="text-[#57534E] leading-[1.8] font-light italic" style={{ fontSize: '1.0625rem' }}>
+                  "The Japanese culture has always intrigued me - the simplicity in their ways, attention to detail and the precision in execution. Their culture portrays community and collaboration in every aspect of life, and this is what shapes our future."
+                </p>
+                <cite className="block mt-3 text-[11px] font-semibold tracking-[0.22em] uppercase text-[#C4805A] not-italic">
+                  Arne Gunter, Founder
+                </cite>
+              </motion.blockquote>
+
               <motion.div variants={fadeUp} className="pt-2">
                 <a
                   href="https://www.instagram.com/katastudio.za/"
@@ -586,79 +467,50 @@ function About() {
   )
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// 05 MATERIAL WORLD
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-const materials = [
-  {
-    label: 'Rammed earth',
-    caption: 'Warmth and geological weight. No two surfaces are alike.',
-    src: img("HH__Interior 09.webp"),
-    alt: 'Rammed earth feature wall, Kata Studio project interior',
-  },
-  {
-    label: 'Exposed timber',
-    caption: 'Grain, knot, and honest structure. The rafter is the ceiling.',
-    src: img("HDW__Internal View 14.webp"),
-    alt: 'Exposed timber rafter ceiling, Kata Studio HDW Residence',
-  },
-  {
-    label: 'Cast concrete',
-    caption: 'Precision and earned silence. The floor that grounds everything.',
-    src: img("HDW__Internal View 15.webp"),
-    alt: 'Cast concrete floor and surfaces, Kata Studio HDW Residence interior',
-  },
-  {
-    label: 'Raw steel',
-    caption: 'Tension and restraint. Where structure is the detail.',
-    src: img("HDW__External View 8.webp"),
-    alt: 'Raw steel architectural detail, Kata Studio HDW Residence exterior',
-  },
-  {
-    label: 'Textured clay plaster',
-    caption: 'Light moves across it. The wall becomes a surface to live with.',
-    src: img("HH__Exterior Aerial 01.webp"),
-    alt: 'Textured plaster facade and landscape, Kata Studio HH House aerial view',
-  },
-  {
-    label: 'Indigenous stone',
-    caption: 'The landscape brought inside. Permanence made touchable.',
-    src: img("HDW__External View 4.webp"),
-    alt: 'Natural stone and landscape integration, Kata Studio HDW Residence exterior',
-  },
+// =====================================================================
+// 04 SERVICES
+// =====================================================================
+const services = [
+  { title: 'Conceptual Design', body: 'From first conversation to spatial concept. We listen to how you want to live and translate that into architectural form, material language, and spatial intent.' },
+  { title: 'Technical Design & Detail', body: 'Every junction, every threshold, every material connection drawn with precision. The design intent carries through to the smallest detail.' },
+  { title: 'Council Submissions', body: 'Full preparation and management of council drawing submissions, coordinating with structural and civil engineers, and navigating the municipal approval process on your behalf.' },
+  { title: 'Construction Documentation', body: 'Comprehensive construction drawings and specifications that ensure your builder prices and builds exactly what was designed. No ambiguity, no interpretation.' },
+  { title: 'Site Management', body: 'On-site oversight throughout construction. We review progress, certify payment claims, and ensure the build matches the approved design at every stage.' },
+  { title: 'Timber Design & Construction', body: 'Specialist consulting in timber building systems: modular design, technical detailing, assembly drawings, and site implementation planning. A unique approach to systemic timber construction.' },
 ]
 
-function MaterialWorld() {
+function Services() {
   return (
-    <section className="relative bg-[#F7F5F2] py-28 md:py-40">
+    <section id="services" className="relative bg-[#F7F5F2] py-28 md:py-40">
       <div className="max-w-[1180px] mx-auto px-6 md:px-10">
-        <FadeUp className="mb-16">
-          <SectionLabel number="05" label="Material World" />
+        <FadeUp className="mb-16 md:mb-24">
+          <SectionLabel number="04" label="Services" />
           <h2
-            className="text-[#3D3A36] leading-[1.08]"
+            className="text-[#3D3A36] leading-[1.08] mb-6"
             style={{ fontSize: 'clamp(1.875rem, 3.5vw, 3.5rem)', fontWeight: 150 }}
           >
-            The materials that<br />make it real.
+            What we deliver.
           </h2>
+          <p
+            className="text-[#57534E] leading-[1.8] font-light max-w-2xl"
+            style={{ fontSize: '1.0625rem' }}
+          >
+            Each project we undertake is an opportunity to showcase our dedication to craftsmanship, delivering spaces that evoke emotions, inspire awe, and stand as testaments to our unwavering pursuit of excellence.
+          </p>
         </FadeUp>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
-          {materials.map((m, i) => (
-            <FadeUp key={m.label} delay={i * 0.07}>
-              <figure>
-                <div className="group relative aspect-square overflow-hidden">
-                  <img
-                    src={m.src}
-                    alt={m.alt}
-                    className="absolute inset-0 w-full h-full object-cover transition-all duration-500 group-hover:scale-[1.03]"
-                    loading="lazy"
-                  />
-                </div>
-                <figcaption className="mt-3 space-y-1">
-                  <p className="text-[11px] font-bold tracking-[0.18em] uppercase text-[#3D3A36]">{m.label}</p>
-                  <p className="text-[13px] text-[#57534E] leading-relaxed font-light">{m.caption}</p>
-                </figcaption>
-              </figure>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-[#D4C9B8]">
+          {services.map((s, i) => (
+            <FadeUp key={s.title} delay={i * 0.07}>
+              <div className="bg-[#F7F5F2] p-8 md:p-10 h-full">
+                <h3 className="group relative inline-block text-sm font-bold tracking-wider text-[#3D3A36] uppercase mb-4">
+                  {s.title}
+                  <span className="pointer-events-none absolute left-0 -bottom-1 h-[2px] w-full origin-left scale-x-0 bg-[#C4805A] transition-transform duration-300 ease-out group-hover:scale-x-100" />
+                </h3>
+                <p className="text-[#57534E] leading-[1.8] font-light" style={{ fontSize: '0.9375rem' }}>
+                  {s.body}
+                </p>
+              </div>
             </FadeUp>
           ))}
         </div>
@@ -668,9 +520,9 @@ function MaterialWorld() {
   )
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// 06 PROCESS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// =====================================================================
+// 05 PROCESS
+// =====================================================================
 const processSteps = [
   {
     number: '01',
@@ -694,7 +546,7 @@ function Process() {
     <section id="process" className="relative bg-[#F7F5F2] py-28 md:py-40">
       <div className="max-w-[1180px] mx-auto px-6 md:px-10">
         <FadeUp className="mb-16 md:mb-24">
-          <SectionLabel number="06" label="Process" />
+          <SectionLabel number="05" label="Process" />
           <h2
             className="text-[#3D3A36] leading-[1.08]"
             style={{ fontSize: 'clamp(1.875rem, 3.5vw, 3.5rem)', fontWeight: 150 }}
@@ -727,16 +579,15 @@ function Process() {
   )
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// 07 CONTACT / COMMISSION
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// =====================================================================
+// 06 CONTACT / COMMISSION
+// =====================================================================
 function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
 
   const handleEnquiry = (e) => {
     e.preventDefault()
-    // TODO: connect to Formspree / Brevo / Mailchimp
     setSubmitted(true)
   }
 
@@ -747,13 +598,12 @@ function Contact() {
     'block text-[11px] font-semibold tracking-[0.2em] uppercase text-[#F7F5F2]/50 mb-2'
 
   return (
-    <section id="contact" className="relative bg-[#3D3A36] py-28 md:py-40">
-      <div className="max-w-[1180px] mx-auto px-6 md:px-10">
+    <section id="contact" className="relative bg-[#3D3A36] py-28 md:py-40" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 94%, 0 100%)' }}>
+      <div className="max-w-[1180px] mx-auto px-6 md:px-10 pb-12">
         <div className="grid lg:grid-cols-12 gap-16 lg:gap-24">
-          {/* Left: copy */}
           <div className="lg:col-span-5">
             <FadeUp>
-              <SectionLabel number="07" label="Commission" dark />
+              <SectionLabel number="06" label="Commission" dark />
               <h2
                 className="text-[#F7F5F2] leading-[1.08] mb-8"
                 style={{ fontSize: 'clamp(1.875rem, 3.5vw, 3.5rem)', fontWeight: 150 }}
@@ -764,12 +614,13 @@ function Contact() {
                 className="text-[#F7F5F2]/65 leading-[1.8] mb-10 font-light"
                 style={{ fontSize: '1.0625rem' }}
               >
-                If you are thinking about a new home, a significant renovation, or a place that you want to feel genuinely yours, share a little of what you have in mind. We will take it from there.
+                Whether you are planning a new home, a significant renovation, a commercial project, or a specialized timber structure, share a little of what you have in mind. We will take it from there.
               </p>
               <address className="not-italic space-y-4 text-sm">
                 <div>
-                  <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#F7F5F2] mb-1">Location</p>
-                  <p className="text-[#F7F5F2]/65 font-light">Pretoria (Tshwane), Gauteng, South Africa</p>
+                  <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#F7F5F2] mb-1">Studio</p>
+                  <p className="text-[#F7F5F2]/65 font-light">Based in Pretoria (Tshwane), Gauteng</p>
+                  <p className="text-[#F7F5F2]/45 font-light text-xs mt-1">Working across South Africa</p>
                 </div>
                 <div>
                   <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#F7F5F2] mb-1">Instagram</p>
@@ -786,7 +637,6 @@ function Contact() {
             </FadeUp>
           </div>
 
-          {/* Right: form */}
           <div className="lg:col-span-7">
             <FadeUp delay={0.1}>
               {submitted ? (
@@ -833,7 +683,7 @@ function Contact() {
                       value={form.message}
                       onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
                       className={`${inputClass} min-h-[unset] resize-none`}
-                      placeholder="Where are you building? What does the space need to feel like?"
+                      placeholder="What are you building? Where is the site? What should the space feel like?"
                     />
                   </div>
                   <div className="flex flex-wrap items-center gap-6">
@@ -858,13 +708,13 @@ function Contact() {
   )
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// =====================================================================
 // FAQ
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// =====================================================================
 const faqs = [
   {
-    q: 'What does the architectural design process look like from first conversation to final build?',
-    a: 'The process moves through three stages: Understand, Shape, and Build. It begins with a deep listening conversation about how you want to live in the space. Concept develops through material studies and spatial drawings before moving into technical documentation and construction. Throughout, the design intent drives every decision from structural form to material selection.',
+    q: 'What does the design process look like from first conversation to final build?',
+    a: 'The process moves through three stages: Understand, Shape, and Build. It begins with a deep listening conversation about how you want to live in and use the space. Concept develops through material studies and spatial drawings before moving into technical documentation and construction. Throughout, the design intent drives every decision from structural form to material selection.',
   },
   {
     q: 'How do you prevent budget overruns, and who is responsible for cost control during the project?',
@@ -872,27 +722,27 @@ const faqs = [
   },
   {
     q: 'Do I appoint my own builder, or does Kata Studio manage the construction process?',
-    a: 'You appoint your own registered builder. Our role during construction is as the principal agent: we issue drawings, review progress, certify payment claims, and ensure the build matches the approved design. We can recommend experienced contractors who have delivered projects to the standard this work demands, but the contract remains directly between you and your builder. This structure keeps you in control of the commercial relationship.',
+    a: 'You appoint your own registered builder. Our role during construction is as the principal agent: we issue drawings, review progress, certify payment claims, and ensure the build matches the approved design. We can recommend experienced contractors who have delivered projects to the standard this work demands, but the contract remains directly between you and your builder.',
   },
   {
     q: 'How much creative input do I have, and at what stage can I still change the design?',
     a: 'Your input is central from the very first conversation. The Understand phase is specifically designed to capture your vision, your lifestyle, and the spatial qualities that matter to you before any design decisions are made. Changes during the Understand and Shape phases are a natural part of the process. Once technical documentation has been produced and submitted for council approval, substantial changes become costly. We are transparent about those thresholds throughout.',
   },
   {
-    q: 'What does the council submission and approval process involve, and how long does it take in Gauteng?',
-    a: 'All building plans require submission to your local municipality for approval before construction can begin. In the Tshwane and Johannesburg Metro areas, approval timelines typically range from 6 to 16 weeks depending on project complexity, zoning, and municipal workload. We prepare and submit all required documentation, coordinate with structural and civil engineers where required, and manage the approval process on your behalf. Heritage overlays, estate guidelines, or special consent applications may add time, and we advise you of these upfront.',
+    q: 'What does the council submission and approval process involve?',
+    a: 'All building plans require submission to your local municipality for approval before construction can begin. In the Tshwane and Johannesburg Metro areas, approval timelines typically range from 6 to 16 weeks depending on project complexity, zoning, and municipal workload. We prepare and submit all required documentation, coordinate with structural and civil engineers where required, and manage the approval process on your behalf.',
   },
   {
-    q: 'How do you approach materials selection, and how does this shape the design?',
-    a: 'Materials are not chosen at the end of the design process. They are the design process. From the first conversation, we consider what the space should feel like to inhabit and work backward to find the materials that carry that feeling. Rammed earth for warmth and weight. Raw timber for grain and scale. Cast concrete for precision and silence. Every material earns its place, and every choice is explained so you understand exactly what you are agreeing to and why.',
+    q: 'Do you work on projects outside of Pretoria?',
+    a: 'Yes. While based in Pretoria, Kata Studio works across Gauteng and takes on select projects throughout South Africa. Our portfolio spans residential, commercial, institutional, and specialized timber projects. Context-sensitive design is central to the practice - the landscape and conditions of each site are not constraints to design around but primary elements to design with.',
   },
   {
-    q: 'Do you work with clients outside of Pretoria, or on rural estate and lodge projects?',
-    a: 'Yes. While based in Pretoria, Kata Studio works across Gauteng and takes on select rural estate, lifestyle property, and lodge projects across South Africa. Context-sensitive design is central to the practice. The landscape of each site is not a constraint to design around but a primary element to design with.',
+    q: 'What types of projects does Kata Studio take on?',
+    a: 'Our experience spans residential homes, rural farmsteads, commercial facilities, institutional buildings, and specialized timber construction. Whether it is a new build, an alteration and addition to an existing structure, or a modular timber project, we bring the same commitment to craft and spatial intention. The founder has contributed to projects ranging from university campuses and eco-offices to warehouses and sports facilities.',
   },
   {
-    q: 'What is the typical timeline and investment range for a bespoke residential commission?',
-    a: 'Bespoke residential projects typically span 12 to 24 months from initial conversation to construction completion, depending on project complexity, site conditions, and council approval timelines. Architectural fees for SACAP-registered services are typically calculated as a percentage of the construction cost, scaled by project scope and stage of involvement. We begin each commission with a structured conversation to understand your programme before discussing fees, so that we can give you a proposal that reflects your actual project rather than a generic estimate.',
+    q: 'What is timber design and construction, and how does Kata Studio specialize in it?',
+    a: 'Timber design and construction is a specialist discipline within architectural practice. We consult on timber building systems from conceptualization through to site execution, including modular design, technical detailing, and assembly drawings. This expertise allows us to deliver timber structures that are engineered with precision and assembled with craft - from small residential elements to full timber building systems.',
   },
 ]
 
@@ -966,28 +816,27 @@ function FAQ() {
   )
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// =====================================================================
 // FOOTER
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// =====================================================================
 function Footer() {
   return (
     <footer className="bg-[#3D3A36] text-[#F7F5F2]/75">
       <div className="max-w-[1180px] mx-auto px-6 md:px-10 pt-20 md:pt-28 pb-6 md:pb-8">
         <div className="grid md:grid-cols-12 gap-12 md:gap-16">
-          {/* Address */}
           <div className="md:col-span-3">
-            <p className="text-[11px] font-bold tracking-[0.22em] uppercase text-[#F7F5F2]/25 mb-5">Address</p>
+            <p className="text-[11px] font-bold tracking-[0.22em] uppercase text-[#F7F5F2]/25 mb-5">Studio</p>
             <address className="not-italic text-sm text-[#F7F5F2]/55 leading-[1.75] space-y-1 font-medium">
-              <p>Pretoria (Tshwane)</p>
+              <p>Based in Pretoria (Tshwane)</p>
               <p>Gauteng, South Africa</p>
+              <p className="text-[#F7F5F2]/35 text-xs pt-1">Working across South Africa</p>
             </address>
           </div>
 
-          {/* Nav */}
           <div className="md:col-span-2">
             <p className="text-[11px] font-bold tracking-[0.22em] uppercase text-[#F7F5F2]/25 mb-5">Navigate</p>
             <nav className="flex flex-col gap-3">
-              {['Work', 'About', 'Process', 'Contact'].map(l => (
+              {['Projects', 'About', 'Services', 'Process', 'Contact'].map(l => (
                 <a
                   key={l}
                   href={`#${l.toLowerCase()}`}
@@ -999,13 +848,13 @@ function Footer() {
             </nav>
           </div>
 
-          {/* Registration */}
           <div className="md:col-span-2">
             <p className="text-[11px] font-bold tracking-[0.22em] uppercase text-[#F7F5F2]/25 mb-5">Registration</p>
-            <p className="text-sm text-[#F7F5F2]/55 leading-relaxed font-medium">SACAP Registered Architects</p>
+            <p className="text-sm text-[#F7F5F2]/55 leading-relaxed font-medium">SACAP Registered</p>
+            <p className="text-sm text-[#F7F5F2]/55 leading-relaxed font-medium">Senior Architectural Technologist</p>
+            <p className="text-xs text-[#F7F5F2]/35 leading-relaxed font-medium mt-1">BT50879</p>
           </div>
 
-          {/* Brand mark + write-up — last column, reads as a signature block */}
           <div className="md:col-span-5 md:flex md:flex-col md:items-end md:text-right">
             <img
               src={img("ks-logo-wh.webp")}
@@ -1013,7 +862,7 @@ function Footer() {
               className="h-10 w-auto mb-7 select-none"
             />
             <p className="text-sm text-[#F7F5F2]/55 leading-[1.75] max-w-xs mb-8 font-medium">
-              Boutique architectural practice in Pretoria. Bespoke luxury residential architecture grounded in material craft and spatial intention.
+              Boutique architectural design practice in Pretoria. Crafting extraordinary spaces grounded in material craft and spatial intention.
             </p>
             <a
               href="https://www.instagram.com/katastudio.za/"
@@ -1026,12 +875,11 @@ function Footer() {
           </div>
         </div>
 
-        {/* Consolidated credit line — sits close to the page edge, out of the way */}
         <div className="mt-16 pt-6 border-t border-[#F7F5F2]/10">
           <p className="text-[11px] text-[#F7F5F2]/25 leading-relaxed text-center md:text-left">
             &copy; {new Date().getFullYear()} Kata Studio. All rights reserved.
             <span className="mx-2 text-[#F7F5F2]/15">&middot;</span>
-            Bespoke architect Pretoria&nbsp;&middot;&nbsp;Luxury residential architect Gauteng
+            Architectural design Pretoria&nbsp;&middot;&nbsp;Timber construction specialist&nbsp;&middot;&nbsp;Working across South Africa
             <span className="mx-2 text-[#F7F5F2]/15">&middot;</span>
             Website design by{' '}
             <a
@@ -1049,28 +897,26 @@ function Footer() {
   )
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// =====================================================================
 // ROOT
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// =====================================================================
 export default function App() {
   const [activeProject, setActiveProject] = useState(null)
 
   return (
-    <div className="font-sans bg-[#F7F5F2] text-[#3D3A36] antialiased pb-[72px]">
+    <div className="font-sans bg-[#F7F5F2] text-[#3D3A36] antialiased">
       <Nav />
       <main>
         <Hero />
         <Philosophy />
-        <SelectedWork />
-        <About />
         <Projects onOpen={setActiveProject} />
-        <MaterialWorld />
+        <About />
+        <Services />
         <Process />
         <Contact />
         <FAQ />
       </main>
       <Footer />
-      <SalesBar />
       <AnimatePresence>
         {activeProject && (
           <CaseStudyModal project={activeProject} onClose={() => setActiveProject(null)} />
@@ -1079,4 +925,3 @@ export default function App() {
     </div>
   )
 }
-
