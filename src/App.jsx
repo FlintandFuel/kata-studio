@@ -312,8 +312,8 @@ function Hero() {
         className="relative w-full aspect-[4/3] md:aspect-[16/7] overflow-hidden"
       >
         <img
-          src={img("HH__Exterior Aerial 01.webp")}
-          alt="Kata Studio - House Harrington aerial view, contemporary coastal architecture"
+          src={img("hero-sketch.webp")}
+          alt="Kata Studio - architectural concept sketch"
           className="absolute inset-0 w-full h-full object-cover"
           fetchPriority="high"
         />
