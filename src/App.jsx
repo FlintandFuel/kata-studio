@@ -582,13 +582,31 @@ function Process() {
 // =====================================================================
 // 06 CONTACT / COMMISSION
 // =====================================================================
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xvkpqbao'
+
 function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState(false)
 
-  const handleEnquiry = (e) => {
+  const handleEnquiry = async (e) => {
     e.preventDefault()
-    setSubmitted(true)
+    setSubmitting(true)
+    setError(false)
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) throw new Error('Submission failed')
+      setSubmitted(true)
+    } catch {
+      setError(true)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const inputClass =
@@ -689,14 +707,20 @@ function Contact() {
                   <div className="flex flex-wrap items-center gap-6">
                     <button
                       type="submit"
-                      className="inline-flex items-center min-h-[44px] text-[11px] font-bold tracking-[0.2em] uppercase px-8 py-3 border border-[#C4805A] text-[#C4805A] hover:bg-[#C4805A] hover:text-[#F7F5F2] transition-all duration-200"
+                      disabled={submitting}
+                      className="inline-flex items-center min-h-[44px] text-[11px] font-bold tracking-[0.2em] uppercase px-8 py-3 border border-[#C4805A] text-[#C4805A] hover:bg-[#C4805A] hover:text-[#F7F5F2] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Begin a Conversation
+                      {submitting ? 'Sending…' : 'Begin a Conversation'}
                     </button>
                     <p className="text-[11px] text-[#F7F5F2]/40 leading-relaxed">
                       Your information is used only to respond to your enquiry.
                     </p>
                   </div>
+                  {error && (
+                    <p className="text-[11px] text-[#E0A458] leading-relaxed">
+                      Something went wrong sending your message. Please try again, or email us directly.
+                    </p>
+                  )}
                 </form>
               )}
             </FadeUp>
