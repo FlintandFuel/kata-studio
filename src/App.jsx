@@ -373,7 +373,7 @@ function Philosophy() {
                 variants={fadeUp}
                 className="text-[11px] font-semibold tracking-[0.22em] uppercase text-[#C4805A] pt-2"
               >
-                SACAP Registered&nbsp;&nbsp;&middot;&nbsp;&nbsp;Senior Architectural Technologist&nbsp;&nbsp;&middot;&nbsp;&nbsp;Pretoria, Gauteng
+                SACAP Registered&nbsp;&nbsp;&middot;&nbsp;&nbsp;Senior Architectural Technologist (Candidate)&nbsp;&nbsp;&middot;&nbsp;&nbsp;Pretoria, Gauteng
               </motion.p>
             </motion.div>
           </div>
@@ -875,7 +875,7 @@ function Footer() {
           <div className="md:col-span-2">
             <p className="text-[11px] font-bold tracking-[0.22em] uppercase text-[#F7F5F2]/25 mb-5">Registration</p>
             <p className="text-sm text-[#F7F5F2]/55 leading-relaxed font-medium">SACAP Registered</p>
-            <p className="text-sm text-[#F7F5F2]/55 leading-relaxed font-medium">Senior Architectural Technologist</p>
+            <p className="text-sm text-[#F7F5F2]/55 leading-relaxed font-medium">Senior Architectural Technologist (Candidate)</p>
             <p className="text-xs text-[#F7F5F2]/35 leading-relaxed font-medium mt-1">BT50879</p>
           </div>
 
